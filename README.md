@@ -35,8 +35,8 @@ Aplicativo possui sistema de validação já implementada e até então não foi
 Luis Victor Barretto
 *luisvictorbarretto@hotmail.com*
 
-William Freitas 
-*williamsilvarj96@gmail.com*
+Willian Freitas 
+*williansilvarj96@gmail.com*
 
 João Lucas Biglia Lobo 
 *joaolucasbldev@hotmail.com*
