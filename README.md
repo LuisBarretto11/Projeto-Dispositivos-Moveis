@@ -5,14 +5,18 @@ Prof. Diego Roberto Antunes
 ## Introdução
 WorkOrder se trata de um aplicativo de ordem de serviço, que é uma aplicação móvel ou web que permite aos usuários criar, gerenciar e acompanhar ordens de serviço de forma eficiente. WorkOrg contêm informações detalhadas sobre um trabalho a ser realizado, incluindo descrição do serviço, localização, prazos, materiais necessários e time que realizará a tarefa. O aplicativo pode oferecer recursos como notificações em tempo real, acompanhamento de status e visualização relatórios. Este tipo de aplicação é frequentemente utilizado por empresas de serviços, como manutenção, reparo, instalação e construção, para otimizar suas operações e melhorar a comunicação com os clientes. 
 
-**Telas**
+### Telas 
 
 Nosso aplicativo de Ordem de Serviços, desenvolvido em Flutter, simplifica a gestão de ordens de serviço em dispositivos móveis. Possui três telas sendo elas: 
-**Tela 1**: Lista de afazeres, é onde vai aparecer os afazeres que foram adicionados.
+#### Tela 1: Lista de afazeres, é onde vai aparecer os afazeres que foram adicionados.
 **Tela 2**: Quando clicado na tarefa, abre uma tela sobre a descrição dela e opção de dar check para concluído, também permite a exclusão.
+
 **Tela 3**: Administrar as tarefas. Remover ou adicionar, ou alterar descrição de alguma tarefa.
+
 **Tela 4**: Visualização das tarefas excluídas.
+
 **Tela 5**: Visualização das tarefas encerradas.
+
 **Tela 6**: Em breve.
 
 ## Instalação
