@@ -36,7 +36,7 @@ Luis Victor Barretto
 *luisvictorbarretto@hotmail.com*
 
 William Freitas 
-*willsilvarj96@hotmail.com*
+*williamsilvarj96@gmail.com*
 
 João Lucas Biglia Lobo 
 *joaolucasbldev@hotmail.com*
