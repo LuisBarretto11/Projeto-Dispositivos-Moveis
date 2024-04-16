@@ -1,9 +1,11 @@
 Programação de Dispositivos Moveis
+
 Prof. Diego Roberto Antunes
-# WorkOrg
+# WorkOrder 
 ## Introdução
-WorkOrg se trata de um aplicativo de ordem de serviço, que é uma aplicação móvel ou web que permite aos usuários criar, gerenciar e acompanhar ordens de serviço de forma eficiente. WorkOrg contêm informações detalhadas sobre um trabalho a ser realizado, incluindo descrição do serviço, localização, prazos, materiais necessários e time que realizará a tarefa. O aplicativo pode oferecer recursos como notificações em tempo real, acompanhamento de status e visualização relatórios. Este tipo de aplicação é frequentemente utilizado por empresas de serviços, como manutenção, reparo, instalação e construção, para otimizar suas operações e melhorar a comunicação com os clientes. 
-# Telas
+WorkOrder se trata de um aplicativo de ordem de serviço, que é uma aplicação móvel ou web que permite aos usuários criar, gerenciar e acompanhar ordens de serviço de forma eficiente. WorkOrg contêm informações detalhadas sobre um trabalho a ser realizado, incluindo descrição do serviço, localização, prazos, materiais necessários e time que realizará a tarefa. O aplicativo pode oferecer recursos como notificações em tempo real, acompanhamento de status e visualização relatórios. Este tipo de aplicação é frequentemente utilizado por empresas de serviços, como manutenção, reparo, instalação e construção, para otimizar suas operações e melhorar a comunicação com os clientes. 
+
+**Telas**
 Nosso aplicativo de Ordem de Serviços, desenvolvido em Flutter, simplifica a gestão de ordens de serviço em dispositivos móveis. Possui três telas sendo elas: 
 **Tela 1**: Lista de afazeres, é onde vai aparecer os afazeres que foram adicionados.
 **Tela 2**: Quando clicado na tarefa, abre uma tela sobre a descrição dela e opção de dar check para concluído, também permite a exclusão.
@@ -24,9 +26,7 @@ Para a instalação do nosso aplicativo, será necessario seguir os seguintes pa
 **Instalação em Dispositivos Android**: Se você deseja instalar o aplicativo em um dispositivo Android sem usar a Google Play Store, você pode habilitar a opção "Fontes desconhecidas" nas configurações do dispositivo e então transferir o arquivo APK (gerado durante a compilação do aplicativo) para o dispositivo e instalá-lo manualmente.
 ## Configuração
 Flutter 3.10
-Aplicativo WorkOrg em versão beta
-
-## Solução de Problemas
+Aplicativo WorkOrder em versão beta
 
 ## Bugs - Teste
 Aplicativo possui sistema de validação já implementada e até então não foi constado nenhum bug ou report referente ao uso. Caso o usuário encontre, por favor reportar através do e-mail da equipe. 
@@ -34,7 +34,9 @@ Aplicativo possui sistema de validação já implementada e até então não foi
 ## Equipe
 Luis Victor Barretto
 *luisvictorbarretto@hotmail.com*
+
 William Freitas 
 *willsilvarj96@hotmail.com*
+
 João Lucas Biglia Lobo 
 *joaolucasbldev@hotmail.com*
