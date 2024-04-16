@@ -63,10 +63,14 @@ class WorkOrderDetailsPage extends StatelessWidget {
                   actions: [
                     IconButton(
                       onPressed: () {
-                        context.read<WorkOrderRepository>().deleteWorkOrder(workOrder);
+                        if (workOrder.deleted) {
+                          context.read<WorkOrderRepository>().restoreWorkOrder(workOrder);
+                        } else {
+                          context.read<WorkOrderRepository>().deleteWorkOrder(workOrder);
+                        }
                         Navigator.of(context).pop();
                       },
-                      icon: const Icon(Icons.delete),
+                      icon: Icon(!workOrder.deleted ? Icons.delete : Icons.restore),
                     ),
                   ],
                 ),
@@ -117,6 +121,16 @@ class WorkOrderDetailsPage extends StatelessWidget {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Number: ${workOrder.number.toString()}',
+                    ),
+                  )
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: TextField(
+                    readOnly: true,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Deleted: ${workOrder.deleted}',
                     ),
                   )
                 ),

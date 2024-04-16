@@ -92,6 +92,28 @@ class WorkOrderRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  restoreWorkOrder(WorkOrder workOrder) {
+    final oldWorkOrder = _workOrders.firstWhere(
+      (wo) => wo.id == workOrder.id,
+    );
+
+    final woIndex = _workOrders.indexOf(oldWorkOrder);
+
+    _workOrders.replaceRange(woIndex, woIndex + 1, [
+      WorkOrder(
+        id: workOrder.id,
+        title: workOrder.title ,
+        description: workOrder.description,
+        status: workOrder.status,
+        number: workOrder.number,
+        createdAt: workOrder.createdAt,
+        updatedAt: DateTime.now(),
+        deleted: false,
+      )
+    ]);
+    notifyListeners();
+  }
+
   updateWorkOrder(WorkOrder workOrder, String title, String description) {
     final oldWorkOrder = _workOrders.firstWhere(
       (wo) => wo.id == workOrder.id,
