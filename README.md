@@ -7,7 +7,8 @@ WorkOrder se trata de um aplicativo de ordem de serviço, que é uma aplicação
 
 ### Telas 
 
-Nosso aplicativo de Ordem de Serviços, desenvolvido em Flutter, simplifica a gestão de ordens de serviço em dispositivos móveis. Possui três telas sendo elas: 
+Nosso aplicativo de Ordem de Serviços, desenvolvido em Flutter, simplifica a gestão de ordens de serviço em dispositivos móveis. Possui três telas sendo elas:
+
 **Tela 1**: Lista de afazeres, é onde vai aparecer os afazeres que foram adicionados.
 
 **Tela 2**: Quando clicado na tarefa, abre uma tela sobre a descrição dela e opção de dar check para concluído, também permite a exclusão.
