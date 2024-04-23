@@ -50,7 +50,7 @@ class WorkOrderRepository extends ChangeNotifier {
           number: 4,
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
-          deleted: false,
+          deleted: true,
         ),
       ],
     );

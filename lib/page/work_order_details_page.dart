@@ -104,6 +104,10 @@ class WorkOrderDetailsPage extends StatelessWidget {
                     style: const TextStyle(fontSize: 18),
                   ),
                 ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Divider(height: 36),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24.0),
                   child: TextField(

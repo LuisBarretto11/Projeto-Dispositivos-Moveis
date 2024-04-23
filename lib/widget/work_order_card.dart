@@ -20,7 +20,7 @@ class WorkOrderCard extends StatelessWidget {
     return Hero(
       tag: 'workOrder-${workOrder.hashCode}',
       child: Card(
-        color: (Theme.of(context).brightness == Brightness.light) ? Colors.blue : Colors.black,
+        color: (Theme.of(context).brightness == Brightness.light) ? workOrder.deleted ? Colors.red : Colors.blue : Colors.black,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
