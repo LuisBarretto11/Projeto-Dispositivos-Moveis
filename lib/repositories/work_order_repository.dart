@@ -1,6 +1,8 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:work_order/database/database.dart';
 import 'package:work_order/enum/work_order.dart';
 import 'package:work_order/models/work_order.dart';
 
@@ -10,129 +12,105 @@ class WorkOrderRepository extends ChangeNotifier {
   UnmodifiableListView<WorkOrder> get workOrders => UnmodifiableListView(_workOrders);
 
   WorkOrderRepository() {
-    _workOrders.addAll(
-      [
-        WorkOrder(
-          id: '1',
-          title: 'cleaning glass ',
-          description: 'use vanish',
-          status: Status.open,
-          number: 1,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          deleted: false,
-        ),
-        WorkOrder(
-          id: '2',
-          title: 'cleaning shoes ',
-          description: 'wear clean shoes',
-          status: Status.open,
-          number: 2,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          deleted: false,
-        ),
-        WorkOrder(
-          id: '3',
-          title: 'pay bill',
-          description: 'pay by ticket',
-          status: Status.open,
-          number: 3,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          deleted: false,
-        ),
-        WorkOrder(
-          id: '4',
-          title: 'hat cleaning',
-          description: 'use hat cleaner',
-          status: Status.closed,
-          number: 4,
-          createdAt: DateTime.now(),
-          updatedAt: DateTime.now(),
-          deleted: true,
-        ),
-      ],
-    );
     notifyListeners();
   }
   
-  saveWorkOrder(WorkOrder workOrder) {
-    _workOrders.add(workOrder);
+  
+  saveWorkOrder(WorkOrder workOrder) async {
+    await DatabaseHelper.instance.insert({
+      'id': workOrder.id,
+      'title': workOrder.title,
+      'description': workOrder.description,
+      'status': Status.open.toString(),
+      'number': workOrder.number,
+      'createdAt': workOrder.createdAt.toIso8601String(),
+      'updatedAt': workOrder.updatedAt.toIso8601String(),
+      'deleted': false,
+    });
     notifyListeners();
   }
 
-  List<WorkOrder> getWorkOrders(bool showDeleted, bool showWoClosed) {
+  Future<List<WorkOrder>> getWorkOrders(showDeleted, showWoClosed) async {
+    final workOrders = await DatabaseHelper.instance.queryAllRows();
+    List<WorkOrder> filteredWorkOrders = workOrders.map((wo) => WorkOrder(
+      id: wo['id'].toString(),
+      title: wo['title'],
+      description: wo['description'],
+      status: wo['status'] == Status.open.toString() ? Status.open : Status.closed,
+      number: wo['number'],
+      createdAt: DateTime.parse(wo['createdAt']),
+      updatedAt: DateTime.parse(wo['updatedAt']),
+      deleted: wo['deleted'] == 1,
+    )).toList();
+
     if (showWoClosed) {
-      return workOrders.where((wo) => wo.status == Status.closed).toList();
+      return filteredWorkOrders.where((wo) => wo.status == Status.closed).toList();
     } else {
-      return workOrders.where((wo) => wo.deleted == showDeleted).toList();
+      return filteredWorkOrders.where((wo) => wo.deleted == showDeleted).toList();
     }
   }
 
-  deleteWorkOrder(WorkOrder workOrder) {
-    final oldWorkOrder = _workOrders.firstWhere(
-      (wo) => wo.id == workOrder.id,
+  Future<void> updateWorkOrder(WorkOrder workOrder, String title, String description) async {
+    WorkOrder updatedWorkOrder = WorkOrder(
+      id: workOrder.id,
+      title: title,
+      description: description,
+      status: workOrder.status,
+      number: workOrder.number,
+      createdAt: workOrder.createdAt,
+      updatedAt: DateTime.now(),
+      deleted: workOrder.deleted,
     );
 
-    final woIndex = _workOrders.indexOf(oldWorkOrder);
-
-    _workOrders.replaceRange(woIndex, woIndex + 1, [
-      WorkOrder(
-        id: workOrder.id,
-        title: workOrder.title ,
-        description: workOrder.description,
-        status: workOrder.status,
-        number: workOrder.number,
-        createdAt: workOrder.createdAt,
-        updatedAt: DateTime.now(),
-        deleted: true,
-      )
-    ]);
+    await DatabaseHelper.instance.update(updatedWorkOrder);
     notifyListeners();
   }
 
-  restoreWorkOrder(WorkOrder workOrder) {
-    final oldWorkOrder = _workOrders.firstWhere(
-      (wo) => wo.id == workOrder.id,
+  Future<void> closeWorkOrder(WorkOrder workOrder) async {
+    WorkOrder updatedWorkOrder = WorkOrder(
+      id: workOrder.id,
+      title: workOrder.title,
+      description: workOrder.description,
+      status: Status.closed,
+      number: workOrder.number,
+      createdAt: workOrder.createdAt,
+      updatedAt: DateTime.now(),
+      deleted: workOrder.deleted,
     );
 
-    final woIndex = _workOrders.indexOf(oldWorkOrder);
-
-    _workOrders.replaceRange(woIndex, woIndex + 1, [
-      WorkOrder(
-        id: workOrder.id,
-        title: workOrder.title ,
-        description: workOrder.description,
-        status: workOrder.status,
-        number: workOrder.number,
-        createdAt: workOrder.createdAt,
-        updatedAt: DateTime.now(),
-        deleted: false,
-      )
-    ]);
+    await DatabaseHelper.instance.update(updatedWorkOrder);
     notifyListeners();
   }
 
-  updateWorkOrder(WorkOrder workOrder, String title, String description) {
-    final oldWorkOrder = _workOrders.firstWhere(
-      (wo) => wo.id == workOrder.id,
+  Future<void> deleteWorkOrder(WorkOrder workOrder) async {
+    WorkOrder updatedWorkOrder = WorkOrder(
+      id: workOrder.id,
+      title: workOrder.title,
+      description: workOrder.description,
+      status: workOrder.status,
+      number: workOrder.number,
+      createdAt: workOrder.createdAt,
+      updatedAt: DateTime.now(),
+      deleted: true,
     );
 
-    final woIndex = _workOrders.indexOf(oldWorkOrder);
+    await DatabaseHelper.instance.update(updatedWorkOrder);
+    notifyListeners();
+  }
 
-    _workOrders.replaceRange(woIndex, woIndex + 1, [
-      WorkOrder(
-        id: workOrder.id,
-        title: title,
-        description: description,
-        status: workOrder.status,
-        number: workOrder.number,
-        createdAt: workOrder.createdAt,
-        updatedAt: DateTime.now(),
-        deleted: workOrder.deleted,
-      )
-    ]);
+  Future<void> restoreWorkOrder(WorkOrder workOrder) async {
+    WorkOrder updatedWorkOrder = WorkOrder(
+      id: workOrder.id,
+      title: workOrder.title,
+      description: workOrder.description,
+      status: workOrder.status,
+      number: workOrder.number,
+      createdAt: workOrder.createdAt,
+      updatedAt: DateTime.now(),
+      deleted: false,
+    );
+
+    await DatabaseHelper.instance.update(updatedWorkOrder);
     notifyListeners();
   }
 }
