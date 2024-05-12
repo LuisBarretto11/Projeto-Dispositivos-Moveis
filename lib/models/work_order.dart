@@ -20,4 +20,17 @@ class WorkOrder {
     required this.updatedAt,
     required this.deleted,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'status': status.toString(),
+      'number': number,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      'deleted': deleted ? 1 : 0,
+    };
+  }
 }
