@@ -1,5 +1,4 @@
 import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:work_order/enum/work_order.dart';
 import 'package:work_order/models/work_order.dart';

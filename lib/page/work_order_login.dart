@@ -1,9 +1,13 @@
 import 'package:work_order/page/work_order_reset_password.dart';
 import 'package:work_order/page/work_order_signup.dart';
-import 'package:work_order/page/work_order_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:work_order/controllers/autenticated.dart';
+
 
 class LoginPage extends StatelessWidget {
+  final controller = Get.put(AutenticacaoController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +25,7 @@ class LoginPage extends StatelessWidget {
               height: 20,
             ),
             TextFormField(
-              // autofocus: true,
+              controller: controller.email,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: "E-mail",
@@ -37,7 +41,7 @@ class LoginPage extends StatelessWidget {
               height: 10,
             ),
             TextFormField(
-              // autofocus: true,
+              controller: controller.senha,
               keyboardType: TextInputType.text,
               obscureText: true,
               decoration: InputDecoration(
@@ -112,12 +116,7 @@ class LoginPage extends StatelessWidget {
                     ],
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WorkOrderPage(),//verificar o erro
-                      ),
-                    );
+                    controller.login();
                   },
                 ),
               ),

@@ -7,7 +7,10 @@ class Title1 {
   String value = 'Deleted';
 }
 
+
 void main() {
+  //await initConfiguration();
+
    runApp(
     MultiProvider(
       providers: [
