@@ -24,6 +24,13 @@ class _WorkOrderPageState extends State<WorkOrderPage> {
   bool showWoClosed = false;
   int numColumns = 2;   
 
+   @override
+    void initState() {
+      super.initState();
+      loadWorkOrders(workOrderRepository);
+    } 
+
+
   workOrderDetails(WorkOrder workOrder) {
     Navigator.push(
       context,
@@ -33,10 +40,21 @@ class _WorkOrderPageState extends State<WorkOrderPage> {
     );
   }
 
+  Future<void> loadWorkOrders(workOrderRepository) async {
+    try {
+      var loadedWorkOrders = await workOrderRepository.getWorkOrders(showDeleted, showWoClosed);
+      setState(() {
+        workOrders = loadedWorkOrders;
+      });
+    } catch (e) {
+      print('Erro ao carregar ordens de serviço: $e');
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final workOrdersRepository = context.watch<WorkOrderRepository>();
-    workOrders = workOrdersRepository.getWorkOrders(showDeleted, showWoClosed);
+    loadWorkOrders(workOrderRepository);
 
     return Scaffold(
       appBar: AppBar(
