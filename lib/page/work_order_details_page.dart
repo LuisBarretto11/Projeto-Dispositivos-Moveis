@@ -3,36 +3,29 @@ import 'package:provider/provider.dart';
 import 'package:work_order/models/work_order.dart';
 import 'package:work_order/repositories/work_order_repository.dart';
 import 'package:work_order/theme/custom_black_theme.dart';
+import 'camera_screen.dart';
+import 'dart:io';
 
-class WorkOrderDetailsPage extends StatelessWidget {
-  // WorkOrder workOrder;
+class WorkOrderDetailsPage extends StatefulWidget {
   final WorkOrder workOrder;
+
+  WorkOrderDetailsPage({Key? key, required this.workOrder}) : super(key: key);
+
+  @override
+  _WorkOrderDetailsPageState createState() => _WorkOrderDetailsPageState();
+}
+
+class _WorkOrderDetailsPageState extends State<WorkOrderDetailsPage> {
   final _workOrderTitle = TextEditingController();
   final _workOrderDescription = TextEditingController();
+  File? _capturedImage;
 
-  WorkOrderDetailsPage({super.key, required this.workOrder}) {
-    _workOrderTitle.text = workOrder.title;
-    _workOrderDescription.text = workOrder.description;
+  @override
+  void initState() {
+    super.initState();
+    _workOrderTitle.text = widget.workOrder.title;
+    _workOrderDescription.text = widget.workOrder.description;
   }
-
-  // final _form = GlobalKey<FormState>();
-
-  // String description = '';  
-
-  // salvar() {
-  //   if (_form.currentState!.validate()) {
-  //     // Salvar a compra
-
-  //     Navigator.pop(context);
-
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(
-  //         content: Text('Work Order saved!'),
-  //         duration: Duration(seconds: 2),
-  //       ),
-  //     );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -41,42 +34,42 @@ class WorkOrderDetailsPage extends StatelessWidget {
     return WillPopScope(
       onWillPop: () {
         context.read<WorkOrderRepository>().updateWorkOrder(
-              workOrder,
+              widget.workOrder,
               _workOrderTitle.text,
               _workOrderDescription.text,
             );
         return Future.value(true);
       },
-      child: Hero(
-        tag: 'workOrder-${workOrder.hashCode}',
-        child: Material(
-          color: isDark ? CustomBlackTheme.black : Colors.red[300],
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              textSelectionTheme: TextSelectionThemeData(
-                selectionColor: isDark ? Colors.green[900] : Colors.pink[100],
-              ),
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () {
+                if (widget.workOrder.deleted) {
+                  context.read<WorkOrderRepository>().restoreWorkOrder(widget.workOrder);
+                } else {
+                  context.read<WorkOrderRepository>().deleteWorkOrder(widget.workOrder);
+                }
+                Navigator.of(context).pop();
+              },
+              icon: Icon(!widget.workOrder.deleted ? Icons.delete : Icons.restore),
             ),
-            child: ListView(
-              children: [
-                AppBar(
-                  actions: [
-                    IconButton(
-                      onPressed: () {
-                        if (workOrder.deleted) {
-                          context.read<WorkOrderRepository>().restoreWorkOrder(workOrder);
-                        } else {
-                          context.read<WorkOrderRepository>().deleteWorkOrder(workOrder);
-                        }
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(!workOrder.deleted ? Icons.delete : Icons.restore),
-                    ),
-                  ],
+          ],
+        ),
+        body: Hero(
+          tag: 'workOrder-${widget.workOrder.hashCode}',
+          child: Material(
+            color: isDark ? CustomBlackTheme.black : Colors.red[300],
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                textSelectionTheme: TextSelectionThemeData(
+                  selectionColor: isDark ? Colors.green[900] : Colors.pink[100],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: TextFormField(
+              ),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                children: [
+                  TextFormField(
                     cursorColor: Colors.deepPurple,
                     controller: _workOrderTitle,
                     minLines: 1,
@@ -86,14 +79,8 @@ class WorkOrderDetailsPage extends StatelessWidget {
                     ),
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Divider(height: 36),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: TextFormField(
+                  const Divider(height: 36),
+                  TextFormField(
                     cursorColor: Colors.brown,
                     controller: _workOrderDescription,
                     minLines: 1,
@@ -103,43 +90,58 @@ class WorkOrderDetailsPage extends StatelessWidget {
                     ),
                     style: const TextStyle(fontSize: 18),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: TextField(
+                  TextField(
                     readOnly: true,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Status: ${workOrder.status.toString().split('.').last}',
+                      hintText: 'Status: ${widget.workOrder.status.toString().split('.').last}',
                     ),
-                  )
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: TextField(
+                  ),
+                  TextField(
                     readOnly: true,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Number: ${workOrder.number.toString()}',
+                      hintText: 'Number: ${widget.workOrder.number.toString()}',
                     ),
-                  )
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: TextField(
+                  ),
+                  TextField(
                     readOnly: true,
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: 'Deleted: ${workOrder.deleted}',
+                      hintText: 'Deleted: ${widget.workOrder.deleted}',
                     ),
-                  )
-                ),
-              ],
+                  ),
+                  if (_capturedImage != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Image.file(_capturedImage!),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            File? image = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CameraScreen(
+                  onFile: (file) {
+                    setState(() {
+                      _capturedImage = file;
+                    });
+                  },
+                ),
+              ),
+            );
+          },
+          child: Icon(Icons.camera),
+        ),
       ),
     );
+  }
+}
 
     // return Scaffold(
     //   appBar: AppBar(
@@ -213,5 +215,3 @@ class WorkOrderDetailsPage extends StatelessWidget {
     //     ),
     //   ),
     // );
-  }
-}
